@@ -753,6 +753,86 @@ footer{background:var(--ink);color:#fff;padding:clamp(30px,4.4vw,60px) 0 clamp(2
 </footer>
 
 <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('leadForm');
+  const successBox = document.getElementById('success');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Impede o recarregamento normal da página
+
+    let isValid = true;
+
+    // 1. Validação simples dos campos obrigatórios
+    const requiredInputs = form.querySelectorAll('[required]');
+    requiredInputs.forEach((input) => {
+      const fieldContainer = input.closest('.field');
+      const errSpan = fieldContainer ? fieldContainer.querySelector('.err') : null;
+
+      if (!input.value.trim()) {
+        isValid = false;
+        if (fieldContainer) fieldContainer.classList.add('is-invalid');
+        if (errSpan) errSpan.style.display = 'block';
+      } else {
+        if (fieldContainer) fieldContainer.classList.remove('is-invalid');
+        if (errSpan) errSpan.style.display = 'none';
+      }
+    });
+
+    // Validar e-mail especificamente
+    const emailInput = document.getElementById('email');
+    if (emailInput && emailInput.value.trim()) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const fieldContainer = emailInput.closest('.field');
+      const errSpan = fieldContainer ? fieldContainer.querySelector('.err') : null;
+
+      if (!emailRegex.test(emailInput.value.trim())) {
+        isValid = false;
+        if (fieldContainer) fieldContainer.classList.add('is-invalid');
+        if (errSpan) errSpan.style.display = 'block';
+      }
+    }
+
+    // Se houver algum campo inválido, interrompe o envio
+    if (!isValid) return;
+
+    // Desabilita o botão para evitar múltiplos envios
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
+
+    try {
+      // 2. Envio assíncrono para o Formspree via Fetch API
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: form.method,
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        // Sucesso: Esconde o formulário e exibe a div de sucesso
+        form.style.display = 'none';
+        if (successBox) {
+          successBox.style.display = 'block';
+          successBox.classList.add('is-active');
+        }
+        form.reset();
+      } else {
+        const data = await response.json();
+        alert(data?.errors?.[0]?.message || 'Ocorreu um erro ao enviar. Tente novamente.');
+      }
+    } catch (error) {
+      console.error('Erro no envio:', error);
+      alert('Erro de conexão. Verifique sua internet e tente novamente.');
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+});
+  
 (function(){
   'use strict';
 
