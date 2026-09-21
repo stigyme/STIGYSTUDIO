@@ -321,7 +321,40 @@ a{color:inherit;text-decoration:none;}
 @media(max-width:860px){
   .cred-statement{grid-template-columns:1fr;}
 }
+/* Regras aplicadas apenas para celulares e tablets pequenos */
+@media (max-width: 768px) {
+  /* 1. Remove o espaço vazio gigante no final */
+  .hero {
+    height: auto !important;
+    min-height: 100vh;
+    padding-bottom: 40px !important;
+  }
+  
+  /* 2. Joga a imagem do produtor para trás */
+  .hero-visual, 
+  .hero-mid {
+    position: absolute !important;
+    z-index: 0 !important; 
+    top: 0;
+    right: 0;
+    width: 100%;
+    opacity: 0.6; /* Opcional: deixa a imagem levemente transparente para o texto ficar mais legível */
+  }
 
+  /* 3. Garante que os textos e botões fiquem na frente de tudo */
+  .hero-bottom, 
+  .hero-copy, 
+  .hero-ctas {
+    position: relative !important;
+    z-index: 99 !important;
+  }
+
+  /* 4. Garante que o título principal também fique na frente */
+  .hero-type {
+    position: relative !important;
+    z-index: 99 !important;
+  }
+}
 /* ---------- WORK ---------- */
 .work{background:var(--paper);color:var(--ink);padding:clamp(52px,8vw,120px) 0;}
 .tracks{border-bottom:1px solid var(--line);}
