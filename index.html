@@ -323,36 +323,39 @@ a{color:inherit;text-decoration:none;}
 }
 /* Regras aplicadas apenas para celulares e tablets pequenos */
 @media (max-width: 768px) {
-  /* 1. Remove o espaço vazio gigante no final */
+  /* 1. Ajusta a altura da seção principal */
   .hero {
     height: auto !important;
     min-height: 100vh;
     padding-bottom: 40px !important;
   }
   
-  /* 2. Joga a imagem do produtor para trás */
-  .hero-visual, 
-  .hero-mid {
+  /* 2. Joga APENAS a imagem (hero-visual) para o fundo absoluto */
+  .hero-visual {
     position: absolute !important;
     z-index: 0 !important; 
     top: 0;
-    right: 0;
+    left: 0;
     width: 100%;
-    opacity: 0.6; /* Opcional: deixa a imagem levemente transparente para o texto ficar mais legível */
+    height: 100%; /* Garante que cubra a tela */
+    opacity: 0.4; /* Deixa mais escuro para o texto ler bem */
   }
 
-  /* 3. Garante que os textos e botões fiquem na frente de tudo */
+  /* 3. Mantém o bloco do meio no fluxo normal para dar espaço */
+  .hero-mid {
+    position: relative !important;
+    padding: 60px 0; /* Cria um respiro entre o topo e o bloco de baixo */
+    display: flex !important;
+    align-items: center;
+  }
+
+  /* 4. Garante que os textos e botões fiquem na frente de tudo */
   .hero-bottom, 
   .hero-copy, 
-  .hero-ctas {
-    position: relative !important;
-    z-index: 99 !important;
-  }
-
-  /* 4. Garante que o título principal também fique na frente */
+  .hero-ctas,
   .hero-type {
     position: relative !important;
-    z-index: 99 !important;
+    z-index: 10 !important;
   }
 }
 /* ---------- WORK ---------- */
